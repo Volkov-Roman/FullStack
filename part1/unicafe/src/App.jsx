@@ -11,30 +11,35 @@ const Statistics = ({ good, neutral, bad, total }) => {
   }
 
   const average = (good - bad) / total
-  const positivePercentage = ((100 * good / total).toFixed(2)) + ' %';
+  const positivePercentage = ((100 * good / total).toFixed(2)) + ' %'
 
   return (
     <div>
-    <h1>statistics</h1>
-    <StatisticLine label="good" value={good} />
-    <StatisticLine label="neutral" value={neutral} />
-    <StatisticLine label="bad" value={bad} />
-    <StatisticLine label="all" value={total} />
-    <StatisticLine label="average" value={average} />
-    <StatisticLine label="positive" value={positivePercentage} />
-  </div>
+      <h1>statistics</h1>
+      <table>
+        <tbody>
+          <StatisticLine label="good" value={good} />
+          <StatisticLine label="neutral" value={neutral} />
+          <StatisticLine label="bad" value={bad} />
+          <StatisticLine label="all" value={total} />
+          <StatisticLine label="average" value={average} />
+          <StatisticLine label="positive" value={positivePercentage} />
+        </tbody>
+      </table>
+    </div>
   )
 }
 
-const StatisticLine = ({ label, value }) => <p>{label} {value}</p>
-
-const Button = ({ onClick, text }) => {
+const StatisticLine = ({ label, value }) => {
   return (
-    <button onClick={onClick}>
-      {text}
-    </button>
-  );
+    <tr>
+      <td>{label}</td>
+      <td>{value}</td>
+    </tr>
+  )
 }
+
+const Button = ({ onClick, text }) => <button onClick={onClick}>{text}</button>
 
 const App = () => {
   const [good, setGood] = useState(0)
