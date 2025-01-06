@@ -10,7 +10,7 @@ const Statistics = ({ good, neutral, bad, total }) => {
     )
   }
 
-  const average = (good - bad) / total
+  const average = ((good - bad) / total).toFixed(2)
   const positivePercentage = ((100 * good / total).toFixed(2)) + ' %'
 
   return (
