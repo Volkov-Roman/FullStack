@@ -56,6 +56,20 @@ const App = () => {
     }
   }
 
+  const handleDeletePerson = id => {
+    const person = persons.find(n => n.id === id)
+    if (window.confirm(`Delete ${person.name}?`)) {
+      personService.erase(id)
+        .then(() => {
+          setPersons(persons.filter(p => p.id !== id))
+        })
+        .catch(error => {
+          alert(`The person '${person.name}' was already deleted from server`)
+          setPersons(persons.filter(p => p.id !== id))
+        })
+    }
+  }
+
   const filteredPersons = persons.filter(person =>
     person.name.toLowerCase().includes(filter.toLowerCase()))
   
@@ -72,7 +86,7 @@ const App = () => {
         handlePhoneChange={handlePhoneChange}
       />
       <h2>Numbers</h2>
-      <Persons persons={filteredPersons} />
+      <Persons persons={filteredPersons} onDelete={handleDeletePerson} />
     </div>
   )
 }
