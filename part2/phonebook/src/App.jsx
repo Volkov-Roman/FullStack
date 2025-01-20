@@ -33,14 +33,28 @@ const App = () => {
 
   const addPerson = (event) => {
     event.preventDefault()
+    const existingPerson = persons.find(p => p.name === newName)
     if (newName !== '' && newPhone !== '') {
-      if (persons.some(person => person.name === newName)) {
-        alert(`${newName} is already added to phonebook`)
+      if (existingPerson) {
+        if (window.confirm(`${newName} is already added to the phonebook, replace the old number with a new one?`)) {
+          const updatedPerson = { ...existingPerson, phone: newPhone }
+          
+          personService.update(existingPerson.id, updatedPerson)
+            .then(returnedPerson => {
+              setPersons(persons.map(p => p.id !== existingPerson.id ? p : returnedPerson))
+              setNewName('')
+              setNewPhone('')
+            })
+            .catch(error => {
+              alert(`The person '${existingPerson.name}' was not found on the server.`)
+              setPersons(persons.filter(p => p.id !== existingPerson.id));
+            })
+        }
       } else {
         const newPerson = {
           name: newName,
           phone: newPhone,
-          id: (persons.length + 1).toString()
+          id: (Math.max(...persons.map(p => parseInt(p.id)), 0) + 1).toString()
         }
         
         personService
