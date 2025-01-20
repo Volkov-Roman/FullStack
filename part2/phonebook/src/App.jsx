@@ -3,6 +3,7 @@ import axios from 'axios'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
+import personService from './services/persons'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -11,9 +12,11 @@ const App = () => {
   const [filter, setFilter] = useState('')
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => setPersons(response.data))
+    personService
+      .getAll()
+      .then(initialPersons => {
+        setPersons(initialPersons)
+      })
   }, [])
 
   const handleNameChange = (event) => {
@@ -37,12 +40,16 @@ const App = () => {
         const newPerson = {
           name: newName,
           phone: newPhone,
-          id: persons.length + 1
+          id: (persons.length + 1).toString()
         }
-
-        setPersons(persons.concat(newPerson))
-        setNewName('')
-        setNewPhone('')
+        
+        personService
+              .create(newPerson)
+              .then(returnedPerson => {
+                setPersons(persons.concat(returnedPerson))
+                setNewName('')
+                setNewPhone('')
+              })
       }
     } else {
       alert('Both name and phone number are required')
