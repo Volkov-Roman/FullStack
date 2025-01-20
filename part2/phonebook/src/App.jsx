@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
+import Notification from './components/Notification'
 import personService from './services/persons'
 
 const App = () => {
@@ -10,6 +10,8 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newPhone, setNewPhone] = useState('')
   const [filter, setFilter] = useState('')
+  const [notificationMessage, setNotificationMessage] = useState(null)
+  const [notificationType, setNotificationType] = useState(null)
 
   useEffect(() => {
     personService
@@ -44,9 +46,14 @@ const App = () => {
               setPersons(persons.map(p => p.id !== existingPerson.id ? p : returnedPerson))
               setNewName('')
               setNewPhone('')
+              handleSetNotification(`Updated ${newName}`)
+              setTimeout(() => {
+                setNotificationMessage(null);
+              }, 5000)
             })
             .catch(error => {
-              alert(`The person '${existingPerson.name}' was not found on the server.`)
+              handleSetNotification(`Error: The person '${existingPerson.name}' was not found on the server.`, 'error')
+              setTimeout(() => {setNotificationMessage(null)}, 5000)
               setPersons(persons.filter(p => p.id !== existingPerson.id));
             })
         }
@@ -63,10 +70,13 @@ const App = () => {
                 setPersons(persons.concat(returnedPerson))
                 setNewName('')
                 setNewPhone('')
+                handleSetNotification(`Added ${newName}`)
+                setTimeout(() => {setNotificationMessage(null)}, 5000)
               })
       }
     } else {
-      alert('Both name and phone number are required')
+      handleSetNotification('Both name and phone number are required', 'error')
+      setTimeout(() => {setNotificationMessage(null)}, 5000)
     }
   }
 
@@ -75,13 +85,25 @@ const App = () => {
     if (window.confirm(`Delete ${person.name}?`)) {
       personService.erase(id)
         .then(() => {
+          setNotificationMessage(`The person '${person.name}' has been deleted successfully`)
+          setTimeout(() => {setNotificationMessage(null)}, 5000)
           setPersons(persons.filter(p => p.id !== id))
         })
         .catch(error => {
-          alert(`The person '${person.name}' was already deleted from server`)
+          setNotificationMessage(`The person '${person.name}' was already deleted from server`, 'error')
+          setTimeout(() => {setNotificationMessage(null)}, 5000)
           setPersons(persons.filter(p => p.id !== id))
         })
     }
+  }
+
+  const handleSetNotification = (msg, type = 'success') => {
+    setNotificationMessage(msg)
+    setNotificationType(type)
+    setTimeout(() => {
+      setNotificationMessage(null);
+      setNotificationType(null);
+    }, 5000);
   }
 
   const filteredPersons = persons.filter(person =>
@@ -90,6 +112,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={notificationMessage} type={notificationType} />
       <Filter value={filter} onChange={handleFilterChange} />
       <h2>Add a new</h2>
       <PersonForm 
