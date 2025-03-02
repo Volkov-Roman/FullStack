@@ -1,16 +1,36 @@
-### Получение всех блогов
+### Get all blogs
 GET http://localhost:3003/api/blogs
+Accept: application/json
 
-### Создание нового блога
+### Get a single blog by ID
+GET http://localhost:3003/api/blogs/67c49be4cec3762f308ec81e
+Accept: application/json
+
+### Create a new blog
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-  "title": "Learning Node.js",
+  "title": "My First Blog",
   "author": "John Doe",
-  "url": "https://nodejs.org/",
+  "url": "https://example.com",
+  "likes": 5
+}
+
+### Delete a blog by ID
+DELETE http://localhost:3003/api/blogs/67c4af7e2f78b1f510fa4023
+
+### Update a blog by ID
+PUT http://localhost:3003/api/blogs/67c4af7e2f78b1f510fa4023
+Content-Type: application/json
+
+{
+  "title": "Updated Blog Title",
+  "author": "John Doe",
+  "url": "https://example.com",
   "likes": 10
 }
 
-### Проверка несуществующего маршрута
-GET http://localhost:3003/invalid-route
+### Get a non-existing blog (should return 404)
+GET http://localhost:3003/api/blogs/000000000000000000000000
+Accept: application/json
