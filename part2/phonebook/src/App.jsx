@@ -73,6 +73,9 @@ const App = () => {
                 handleSetNotification(`Added ${newName}`)
                 setTimeout(() => {setNotificationMessage(null)}, 5000)
               })
+              .catch(error => {
+                handleSetNotification(error.response.data.error, 'error')
+              })
       }
     } else {
       handleSetNotification('Both name and phone number are required', 'error')

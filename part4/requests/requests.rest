@@ -1,0 +1,16 @@
+### Получение всех блогов
+GET http://localhost:3003/api/blogs
+
+### Создание нового блога
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+  "title": "Learning Node.js",
+  "author": "John Doe",
+  "url": "https://nodejs.org/",
+  "likes": 10
+}
+
+### Проверка несуществующего маршрута
+GET http://localhost:3003/invalid-route
