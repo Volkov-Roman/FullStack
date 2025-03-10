@@ -46,7 +46,7 @@ test('blog posts have id field instead of _id', async () => {
   })
 })
 
-test.only('successfully creates a new blog post', async () => {
+test('successfully creates a new blog post', async () => {
   const newBlog = {
     title: "New Blog Post",
     author: "John Doe",
@@ -69,6 +69,21 @@ test.only('successfully creates a new blog post', async () => {
   // Verify that the saved blog exists in the database
   const titles = blogs.map(b => b.title)
   assert.ok(titles.includes(newBlog.title), 'Expected new blog title to be in database')
+})
+
+test('if likes property is missing, it defaults to 0', async () => {
+  const newBlog = {
+    title: "Blog Without Likes",
+    author: "Anonymous",
+    url: "http://example.com/no-likes"
+  }
+
+  const response = await api.post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  assert.strictEqual(response.body.likes, 0, 'Expected default likes to be 0')
 })
 
 after(async () => {
