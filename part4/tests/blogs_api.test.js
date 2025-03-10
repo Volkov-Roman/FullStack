@@ -110,6 +110,26 @@ test('if url is missing, respond with 400 Bad Request', async () => {
     .expect(400)
 })
 
+test.only('deleting an existing blog returns 204 No Content', async () => {
+  const responseBefore = await api.get('/api/blogs')
+  const blogToDelete = responseBefore.body[0]
+
+  await api.delete(`/api/blogs/${blogToDelete.id}`)
+    .expect(204)
+
+  const responseAfter = await api.get('/api/blogs')
+  const blogIds = responseAfter.body.map(blog => blog.id)
+
+  assert.ok(!blogIds.includes(blogToDelete.id), 'Deleted blog should not exist in database')
+})
+
+test.only('deleting a non-existing blog returns 404 Not Found', async () => {
+  const nonExistingId = new mongoose.Types.ObjectId().toString()
+
+  await api.delete(`/api/blogs/${nonExistingId}`)
+    .expect(404)
+})
+
 after(async () => {
     await mongoose.connection.close()
   })
