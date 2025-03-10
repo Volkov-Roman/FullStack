@@ -110,7 +110,7 @@ test('if url is missing, respond with 400 Bad Request', async () => {
     .expect(400)
 })
 
-test.only('deleting an existing blog returns 204 No Content', async () => {
+test('deleting an existing blog returns 204 No Content', async () => {
   const responseBefore = await api.get('/api/blogs')
   const blogToDelete = responseBefore.body[0]
 
@@ -123,11 +123,38 @@ test.only('deleting an existing blog returns 204 No Content', async () => {
   assert.ok(!blogIds.includes(blogToDelete.id), 'Deleted blog should not exist in database')
 })
 
-test.only('deleting a non-existing blog returns 404 Not Found', async () => {
+test('deleting a non-existing blog returns 404 Not Found', async () => {
   const nonExistingId = new mongoose.Types.ObjectId().toString()
 
   await api.delete(`/api/blogs/${nonExistingId}`)
     .expect(404)
+})
+
+test('successfully updates an existing blog', async () => {
+  const responseBefore = await api.get('/api/blogs')
+  const blogToUpdate = responseBefore.body[0]
+
+  const updatedData = {
+    title: "Updated Blog Title",
+    author: "Updated Author",
+    url: "http://example.com/updated",
+    likes: 100
+  }
+
+  const response = await api.put(`/api/blogs/${blogToUpdate.id}`)
+    .send(updatedData)
+    .expect(200)
+    .expect('Content-Type', /application\/json/)
+
+  // Verify response data matches updates
+  assert.strictEqual(response.body.title, updatedData.title)
+  assert.strictEqual(response.body.author, updatedData.author)
+  assert.strictEqual(response.body.url, updatedData.url)
+  assert.strictEqual(response.body.likes, updatedData.likes)
+
+  // Verify changes in the database
+  const responseAfter = await api.get(`/api/blogs/${blogToUpdate.id}`)
+  assert.strictEqual(responseAfter.body.title, updatedData.title)
 })
 
 after(async () => {
