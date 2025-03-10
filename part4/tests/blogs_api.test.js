@@ -37,13 +37,38 @@ test('blogs are returned as JSON and the count is correct', async () => {
   assert.strictEqual(response.body.length, initialBlogs.length)
 })
 
-test.only('blog posts have id field instead of _id', async () => {
+test('blog posts have id field instead of _id', async () => {
   const response = await api.get('/api/blogs')
 
   response.body.forEach(blog => {
     assert.ok(blog.id, 'Expected blog to have an "id" field')
     assert.strictEqual(blog._id, undefined, 'Expected blog._id to be undefined')
   })
+})
+
+test.only('successfully creates a new blog post', async () => {
+  const newBlog = {
+    title: "New Blog Post",
+    author: "John Doe",
+    url: "http://example.com/new-blog",
+    likes: 15
+  }
+
+  await api.post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  // Fetch all blogs from DB
+  const response = await api.get('/api/blogs')
+  const blogs = response.body
+
+  // Check that number of blogs increased by 1
+  assert.strictEqual(blogs.length, initialBlogs.length + 1)
+
+  // Verify that the saved blog exists in the database
+  const titles = blogs.map(b => b.title)
+  assert.ok(titles.includes(newBlog.title), 'Expected new blog title to be in database')
 })
 
 after(async () => {
