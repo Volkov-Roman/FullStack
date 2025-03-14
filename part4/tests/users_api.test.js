@@ -9,7 +9,7 @@ const User = require('../models/user')
 
 const api = supertest(app)
 
-describe('when there is initially one user in db', () => {
+describe.only('when there is initially one user in db', () => {
   beforeEach(async () => {
     await User.deleteMany({})
 
@@ -60,6 +60,53 @@ describe('when there is initially one user in db', () => {
     assert(result.body.error.includes('expected `username` to be unique'))
 
     assert.strictEqual(usersAtEnd.length, usersAtStart.length)
+  })
+
+  test.only('creation fails if password is missing', async () => {
+    const newUser = {
+      username: 'testuser',
+      name: 'Test User',
+    }
+
+    const result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+
+    assert(result.body.error.includes('Username and password are required'))
+  })
+
+  test.only('creation fails if password is too short', async () => {
+    const newUser = {
+      username: 'testuser',
+      name: 'Test User',
+      password: '12'
+    }
+
+    const result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+
+    assert(result.body.error.includes('Password must be at least 3 characters long'))
+  })
+
+  test.only('creation fails if username is too short', async () => {
+    const newUser = {
+      username: 'ab',
+      name: 'Test User',
+      password: 'password123'
+    }
+
+    const result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+
+    assert(result.body.error.includes('Username must be at least 3 characters long'))
   })
 })
 
