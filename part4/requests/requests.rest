@@ -18,7 +18,7 @@ Content-Type: application/json
 }
 
 ### Delete a blog by ID
-DELETE http://localhost:3003/api/blogs/67c4af7e2f78b1f510fa4023
+DELETE http://localhost:3003/api/blogs/67d3e729577a221b6400fa80
 
 ### Update a blog by ID
 PUT http://localhost:3003/api/blogs/67c4af7e2f78b1f510fa4023
