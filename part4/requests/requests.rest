@@ -14,11 +14,12 @@ Content-Type: application/json
   "title": "My First Blog",
   "author": "John Doe",
   "url": "https://example.com",
-  "likes": 5
+  "likes": 5,
+  "userId": "67d3ede8e96029bc9fe6d5c7"
 }
 
 ### Delete a blog by ID
-DELETE http://localhost:3003/api/blogs/67d3e729577a221b6400fa80
+DELETE http://localhost:3003/api/blogs/67c5d7b12cc42ec7b7f61fb2
 
 ### Update a blog by ID
 PUT http://localhost:3003/api/blogs/67c4af7e2f78b1f510fa4023
@@ -33,4 +34,18 @@ Content-Type: application/json
 
 ### Get a non-existing blog (should return 404)
 GET http://localhost:3003/api/blogs/000000000000000000000000
+Accept: application/json
+
+### Successful user creation
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+  "username": "susinen",
+  "name": "Roman Volkov",
+  "password": "securepassword"
+}
+
+### Retrieve all users
+GET http://localhost:3003/api/users
 Accept: application/json

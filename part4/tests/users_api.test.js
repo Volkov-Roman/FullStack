@@ -9,7 +9,7 @@ const User = require('../models/user')
 
 const api = supertest(app)
 
-describe.only('when there is initially one user in db', () => {
+describe('when there is initially one user in db', () => {
   beforeEach(async () => {
     await User.deleteMany({})
 
@@ -77,7 +77,7 @@ describe.only('when there is initially one user in db', () => {
     assert(result.body.error.includes('Username and password are required'))
   })
 
-  test.only('creation fails if password is too short', async () => {
+  test('creation fails if password is too short', async () => {
     const newUser = {
       username: 'testuser',
       name: 'Test User',
@@ -93,7 +93,7 @@ describe.only('when there is initially one user in db', () => {
     assert(result.body.error.includes('Password must be at least 3 characters long'))
   })
 
-  test.only('creation fails if username is too short', async () => {
+  test('creation fails if username is too short', async () => {
     const newUser = {
       username: 'ab',
       name: 'Test User',
