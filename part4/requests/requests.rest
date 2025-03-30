@@ -9,13 +9,13 @@ Accept: application/json
 ### Create a new blog
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InN1c2luZW4iLCJpZCI6IjY3ZDNlZGU4ZTk2MDI5YmM5ZmU2ZDVjNyIsImlhdCI6MTc0MzM1NDgxOH0.-EkxjB8Ur2-m18oMShp8RILCIP6f_tQaeFbYvdwoFvg
 
 {
   "title": "My First Blog",
   "author": "John Doe",
   "url": "https://example.com",
-  "likes": 5,
-  "userId": "67d3ede8e96029bc9fe6d5c7"
+  "likes": 5
 }
 
 ### Delete a blog by ID
@@ -49,3 +49,12 @@ Content-Type: application/json
 ### Retrieve all users
 GET http://localhost:3003/api/users
 Accept: application/json
+
+### Login
+POST http://localhost:3003/api/login
+Content-Type: application/json
+
+{
+  "username": "susinen",
+  "password": "securepassword"
+}
