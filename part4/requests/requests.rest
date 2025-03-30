@@ -9,7 +9,7 @@ Accept: application/json
 ### Create a new blog
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InN1c2luZW4iLCJpZCI6IjY3ZDNlZGU4ZTk2MDI5YmM5ZmU2ZDVjNyIsImlhdCI6MTc0MzM1NDgxOH0.-EkxjB8Ur2-m18oMShp8RILCIP6f_tQaeFbYvdwoFvg
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InN1c2luZW4iLCJpZCI6IjY3ZDNlZGU4ZTk2MDI5YmM5ZmU2ZDVjNyIsImlhdCI6MTc0MzM1NTE4NCwiZXhwIjoxNzQzMzU4Nzg0fQ.t5_TJRvJTOqdDBP-hpPH8UGl7CTAkkGUt_etrXtDjqI
 
 {
   "title": "My First Blog",
