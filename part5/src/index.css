@@ -18,3 +18,34 @@ h1 {
     padding: 10px;
     margin-bottom: 10px;
   }
+
+  body {
+    font-family: sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 2rem;
+  }
+  
+  form > div {
+    margin-bottom: 10px;
+  }
+  
+  button {
+    margin-left: 10px;
+    padding: 5px 10px;
+    border-radius: 4px;
+    background: #1976d2;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background: #1565c0;
+  }
+  
+  input {
+    padding: 5px;
+    margin-left: 5px;
+  }
+  
