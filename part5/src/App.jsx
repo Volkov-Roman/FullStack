@@ -7,7 +7,8 @@ import loginService from './services/login'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [errorMessage, setErrorMessage] = useState(null)
+  const [message, setMessage] = useState(null)
+  const [messageType, setMessageType] = useState('')
   const [username, setUsername] = useState('') 
   const [password, setPassword] = useState('') 
   const [user, setUser] = useState(null)
@@ -98,9 +99,10 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (exception) {
-      setErrorMessage('Wrong credentials')
+      setMessage('Wrong credentials')
+      setMessageType('error')
       setTimeout(() => {
-        setErrorMessage(null)
+        setMessage(null)
       }, 5000)
     }
   }
@@ -126,6 +128,10 @@ const App = () => {
       setNewTitle('')
       setNewAuthor('')
       setNewUrl('')
+
+      setMessage(`A new blog "${returnedBlog.title}" by ${returnedBlog.author} added`)
+      setMessageType('success')
+      setTimeout(() => setMessage(null), 5000)
   }
 
   const handleBlogChange = (setter) => (event) => {
@@ -136,7 +142,7 @@ const App = () => {
     <div>
       <h1>Blogs</h1>
 
-      <Notification message={errorMessage} />
+      <Notification message={message} type={messageType} />
 
       {user === null ?
         loginForm() :
