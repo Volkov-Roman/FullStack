@@ -4,6 +4,7 @@ const assert = require('node:assert')
 const supertest = require('supertest')
 const app = require('../app')
 const Blog = require('../models/blog')
+const User = require('../models/user')
 
 const api = supertest(app)
 
@@ -22,10 +23,27 @@ const initialBlogs = [
     }
   ]
   
+let authToken = ''
 
 beforeEach(async () => {
+  await User.deleteMany({})
   await Blog.deleteMany({})
-  await Blog.insertMany(initialBlogs)
+
+  const newUser = {
+    username: 'testuser',
+    name: 'Test User',
+    password: 'password123'
+  }
+
+  await api.post('/api/users').send(newUser)
+
+  const loginResponse = await api
+    .post('/api/login')
+    .send({ username: 'testuser', password: 'password123' })
+
+  authToken = loginResponse.body.token
+
+  await Blog.insertMany(initialBlogs.map(b => ({ ...b, user: loginResponse.body.id })))
 })
 
 test('blogs are returned as JSON and the count is correct', async () => {
@@ -55,6 +73,7 @@ test('successfully creates a new blog post', async () => {
   }
 
   await api.post('/api/blogs')
+    .set('Authorization', `Bearer ${authToken}`)
     .send(newBlog)
     .expect(201)
     .expect('Content-Type', /application\/json/)
@@ -79,6 +98,7 @@ test('if likes property is missing, it defaults to 0', async () => {
   }
 
   const response = await api.post('/api/blogs')
+    .set('Authorization', `Bearer ${authToken}`)  
     .send(newBlog)
     .expect(201)
     .expect('Content-Type', /application\/json/)
@@ -94,6 +114,7 @@ test('if title is missing, respond with 400 Bad Request', async () => {
   }
 
   await api.post('/api/blogs')
+    .set('Authorization', `Bearer ${authToken}`)  
     .send(newBlog)
     .expect(400)
 })
@@ -106,6 +127,7 @@ test('if url is missing, respond with 400 Bad Request', async () => {
   }
 
   await api.post('/api/blogs')
+    .set('Authorization', `Bearer ${authToken}`)
     .send(newBlog)
     .expect(400)
 })
@@ -115,6 +137,7 @@ test('deleting an existing blog returns 204 No Content', async () => {
   const blogToDelete = responseBefore.body[0]
 
   await api.delete(`/api/blogs/${blogToDelete.id}`)
+    .set('Authorization', `Bearer ${authToken}`)  
     .expect(204)
 
   const responseAfter = await api.get('/api/blogs')
@@ -127,6 +150,7 @@ test('deleting a non-existing blog returns 404 Not Found', async () => {
   const nonExistingId = new mongoose.Types.ObjectId().toString()
 
   await api.delete(`/api/blogs/${nonExistingId}`)
+    .set('Authorization', `Bearer ${authToken}`)
     .expect(404)
 })
 
