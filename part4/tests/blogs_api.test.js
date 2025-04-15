@@ -181,6 +181,21 @@ test('successfully updates an existing blog', async () => {
   assert.strictEqual(responseAfter.body.title, updatedData.title)
 })
 
+test('adding a blog fails with 401 Unauthorized if token is not provided', async () => {
+  const newBlog = {
+    title: "Unauthorized Blog",
+    author: "No Token",
+    url: "http://example.com/unauthorized",
+    likes: 1
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(401)
+})
+
+
 after(async () => {
     await mongoose.connection.close()
   })
