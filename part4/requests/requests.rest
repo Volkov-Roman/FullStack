@@ -3,24 +3,24 @@ GET http://localhost:3003/api/blogs
 Accept: application/json
 
 ### Get a single blog by ID
-GET http://localhost:3003/api/blogs/67c49be4cec3762f308ec81e
+GET http://localhost:3003/api/blogs/67d3ef924b58fdcab7ee5a0c
 Accept: application/json
 
 ### Create a new blog
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InN1c2luZW4iLCJpZCI6IjY3ZDNlZGU4ZTk2MDI5YmM5ZmU2ZDVjNyIsImlhdCI6MTc0MzM1NjQ0MywiZXhwIjoxNzQzMzYwMDQzfQ.u2v9KTZJHF6s8jtzDH0EzblH65130r8DcKkuAVMgric
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InN1c2luZW4yIiwiaWQiOiI2N2ZlNWE0ODU2Y2FmZDkyYWVkNTNjODEiLCJpYXQiOjE3NDQ3MjI1MTMsImV4cCI6MTc0NDcyNjExM30.2fhqsiNOJ9Cz8B7Jbi7gyIoeiUe3BOD7A4dI2q0PXdo
 
 {
-  "title": "My First Blog",
+  "title": "My Second Blog",
   "author": "John Doe",
   "url": "https://example.com",
   "likes": 5
 }
 
 ### Delete a blog by ID
-DELETE http://localhost:3003/api/blogs/67e98236694891b3adbfb2db
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InN1c2luZW4iLCJpZCI6IjY3ZDNlZGU4ZTk2MDI5YmM5ZmU2ZDVjNyIsImlhdCI6MTc0MzM1NjQ0MywiZXhwIjoxNzQzMzYwMDQzfQ.u2v9KTZJHF6s8jtzDH0EzblH65130r8DcKkuAVMgric
+DELETE http://localhost:3003/api/blogs/67fe5a9556cafd92aed53c93
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InN1c2luZW4yIiwiaWQiOiI2N2ZlNWE0ODU2Y2FmZDkyYWVkNTNjODEiLCJpYXQiOjE3NDQ3MjI1MTMsImV4cCI6MTc0NDcyNjExM30.2fhqsiNOJ9Cz8B7Jbi7gyIoeiUe3BOD7A4dI2q0PXdo
 
 ### Update a blog by ID
 PUT http://localhost:3003/api/blogs/67c4af7e2f78b1f510fa4023
@@ -42,8 +42,8 @@ POST http://localhost:3003/api/users
 Content-Type: application/json
 
 {
-  "username": "susinen",
-  "name": "Roman Volkov",
+  "username": "susinen2",
+  "name": "Roman Volkov2",
   "password": "securepassword"
 }
 
@@ -56,6 +56,6 @@ POST http://localhost:3003/api/login
 Content-Type: application/json
 
 {
-  "username": "susinen",
+  "username": "susinen2",
   "password": "securepassword"
 }
