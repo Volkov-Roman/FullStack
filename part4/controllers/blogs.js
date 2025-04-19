@@ -59,7 +59,7 @@ blogsRouter.put('/:id', async (request, response) => {
     { new: true, runValidators: true, context: 'query' }
   )
 
-  response.json(updatedBlog)
+  response.json(updatedBlog.toJSON())
 })
 
 module.exports = blogsRouter
