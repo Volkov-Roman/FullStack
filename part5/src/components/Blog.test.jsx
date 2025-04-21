@@ -39,3 +39,27 @@ test('shows blog URL and likes when details button is clicked', async () => {
     expect(screen.getByText('http://example.com')).toBeDefined()
     expect(screen.getByText(/420/)).toBeDefined()
   })
+
+  test('clicking the like button twice calls event handler twice', async () => {
+    const blog = {
+      title: 'Testing React components',
+      author: 'Roma',
+      url: 'http://example.com',
+      likes: 420
+    }
+  
+    const mockHandler = vi.fn()
+  
+    render(<Blog blog={blog} likeBlog={mockHandler} />)
+  
+    const user = userEvent.setup()
+  
+    const viewButton = screen.getByText('view')
+    await user.click(viewButton)
+  
+    const likeButton = screen.getByText('like')
+    await user.click(likeButton)
+    await user.click(likeButton)
+  
+    expect(mockHandler.mock.calls).toHaveLength(2)
+  })
