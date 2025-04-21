@@ -7,5 +7,5 @@ const Notification = ({ message, type }) => {
     </div>
   )
 }
-  
-  export default Notification
+
+export default Notification

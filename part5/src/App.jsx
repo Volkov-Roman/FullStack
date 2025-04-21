@@ -13,8 +13,8 @@ const App = () => {
   const [message, setMessage] = useState(null)
   const [messageType, setMessageType] = useState('')
   const [loginVisible, setLoginVisible] = useState(false)
-  const [username, setUsername] = useState('') 
-  const [password, setPassword] = useState('') 
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const blogFormRef = useRef()
 
@@ -64,7 +64,7 @@ const App = () => {
 
   const handleLogin = async (event) => {
     event.preventDefault()
-    
+
     try {
       const user = await loginService.login({
         username, password,
@@ -72,7 +72,7 @@ const App = () => {
 
       window.localStorage.setItem(
         'loggedBlogappUser', JSON.stringify(user)
-      ) 
+      )
 
       blogService.setToken(user.token)
       setUser(user)
@@ -94,22 +94,21 @@ const App = () => {
   }
 
   const addBlog = async (blogObject) => {
-      blogFormRef.current.toggleVisibility()
-      const returnedBlog = await blogService.create(blogObject)
-      setBlogs(blogs.concat(returnedBlog))
-
-      setMessage(`A new blog "${returnedBlog.title}" by ${returnedBlog.author} added`)
-      setMessageType('success')
-      setTimeout(() => setMessage(null), 5000)
+    blogFormRef.current.toggleVisibility()
+    const returnedBlog = await blogService.create(blogObject)
+    setBlogs(blogs.concat(returnedBlog))
+    setMessage(`A new blog "${returnedBlog.title}" by ${returnedBlog.author} added`)
+    setMessageType('success')
+    setTimeout(() => setMessage(null), 5000)
   }
 
   const deleteBlog = async (blog) => {
     const ok = window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)
     if (!ok) return
-  
+
     await blogService.remove(blog.id)
     setBlogs(blogs.filter(b => b.id !== blog.id))
-  
+
     setMessage(`Deleted blog: ${blog.title}`)
     setMessageType('success')
     setTimeout(() => setMessage(null), 5000)
@@ -121,7 +120,7 @@ const App = () => {
       likes: blog.likes + 1,
       user: blog.user.id || blog.user
     }
-  
+
     const returnedBlog = await blogService.update(blog.id, updatedBlog)
     setBlogs(blogs.map(b => b.id !== blog.id ? b : returnedBlog))
   }

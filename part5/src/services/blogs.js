@@ -29,7 +29,7 @@ const remove = async (id) => {
   const config = {
     headers: { Authorization: token }
   }
-  
+
   return axios.delete(`${baseUrl}/${id}`, config)
 }
 
