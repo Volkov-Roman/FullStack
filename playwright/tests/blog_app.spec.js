@@ -63,5 +63,23 @@ describe('Blog app', () => {
 
         await expect(page.getByText('React test Author')).toBeVisible()
       })
+
+      test('a blog can be liked', async ({ page }) => {
+        await createBlog(page, {
+          title: 'React test',
+          author: 'Author',
+          url: 'https://example.com'
+        })
+
+        await page.getByRole('button', { name: 'view' }).click()
+      
+        const likesText = await page.getByText(/likes:/).textContent()
+        const likesBefore = parseInt(likesText.match(/\d+/)[0])
+      
+        await page.getByRole('button', { name: 'like' }).click()
+        await expect(page.getByText(`likes: ${likesBefore + 1}`)).toBeVisible()
+      })
     })  
+
+
 })
