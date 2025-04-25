@@ -120,5 +120,38 @@ describe('Blog app', () => {
         await page.getByRole('button', { name: 'view' }).click()
         await expect(page.getByRole('button', { name: 'remove' })).not.toBeVisible()
       })
+
+      test('blogs are ordered according to likes (most likes first)', async ({ page }) => {
+        await createBlog(page, {
+          title: 'More popular blog',
+          author: 'Author A',
+          url: 'https://a.com'
+        })
+      
+        await createBlog(page, {
+          title: 'Less popular blog',
+          author: 'Author B',
+          url: 'https://b.com'
+        })
+      
+        // Open all the details of all the blogs
+        const viewButtons = await page.getByRole('button', { name: 'view' }).all()
+        for (const button of viewButtons) {
+          await button.click()
+        }
+      
+        // Like "More popular blog" two times
+        const blogs = await page.locator('.blog').all()
+        for (const blog of blogs) {
+          const text = await blog.textContent()
+          if (text.includes('More popular blog')) {
+            const likeButton = await blog.getByRole('button', { name: 'like' })
+            await likeButton.click()
+          }
+        }
+      
+        const blogsAfterLiking = await page.locator('.blog').allTextContents()
+        expect(blogsAfterLiking[0]).toContain('More popular blog')
+      })      
     })  
 })
