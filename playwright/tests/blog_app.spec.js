@@ -79,7 +79,24 @@ describe('Blog app', () => {
         await page.getByRole('button', { name: 'like' }).click()
         await expect(page.getByText(`likes: ${likesBefore + 1}`)).toBeVisible()
       })
-    })  
 
+      test('the user who created the blog can delete it', async ({ page }) => {
+        await createBlog(page, {
+          title: 'React test',
+          author: 'Author',
+          url: 'https://example.com'
+        })
+      
+        await page.getByRole('button', { name: 'view' }).click()
+      
+        page.once('dialog', async dialog => {
+          expect(dialog.message()).toContain('Remove blog React test by Author?')
+          await dialog.accept()
+        })
+      
+        await page.getByRole('button', { name: 'remove' }).click()
+        await expect(page.getByText('React test Author')).not.toBeVisible()
+      })
+    })  
 
 })
