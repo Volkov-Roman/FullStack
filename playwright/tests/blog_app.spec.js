@@ -31,21 +31,22 @@ describe('Blog app', () => {
       await expect(page.getByRole('button', { name: 'cancel' })).toBeVisible()
     })
 
-    test('login fails with wrong password', async ({ page }) => {
-      await loginWith(page, 'romatest', 'wrongpassword')
-  
-      const errorDiv = await page.locator('.error')
-      await expect(errorDiv).toContainText('Wrong credentials')
-      await expect(errorDiv).toHaveCSS('border-style', 'solid')
-      await expect(errorDiv).toHaveCSS('color', 'rgb(255, 0, 0)')
-
-      await expect(page.getByText('Roma Susi logged in')).not.toBeVisible()
-    })
-
-    test('user can log in', async ({ page }) => {
-      await loginWith(page, 'romatest', 'salasana')
-
-      await expect(page.getByText('Roma Susi logged-in')).toBeVisible()
+    describe('Login', () => {
+      test('succeeds with correct credentials', async ({ page }) => {
+        await loginWith(page, 'romatest', 'salasana')
+        await expect(page.getByText('Roma Susi logged-in')).toBeVisible()
+      })
+    
+      test('fails with wrong credentials', async ({ page }) => {
+        await loginWith(page, 'romatest', 'wrongpassword')
+    
+        const errorDiv = await page.locator('.error')
+        await expect(errorDiv).toContainText('Wrong credentials')
+        await expect(errorDiv).toHaveCSS('border-style', 'solid')
+        await expect(errorDiv).toHaveCSS('color', 'rgb(255, 0, 0)')
+    
+        await expect(page.getByText('Roma Susi logged in')).not.toBeVisible()
+      })
     })
 
     describe('when logged in', () => {
