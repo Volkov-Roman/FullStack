@@ -2,18 +2,27 @@ const { test, expect, describe, beforeEach } = require('@playwright/test')
 const { loginWith, createBlog } = require('./helper')
 
 describe('Blog app', () => {
-    beforeEach(async ({ page, request }) => {
-      await request.post('/api/testing/reset')
-      await request.post('/api/users', {
-        data: {
-          name: 'Roma Susi',
-          username: 'romatest',
-          password: 'salasana'
-        }
-      })
-
-      await page.goto('/')
+  beforeEach(async ({ page, request }) => {
+    await request.post('/api/testing/reset')
+  
+    await request.post('/api/users', {
+      data: {
+        name: 'Roma Susi',
+        username: 'romatest',
+        password: 'salasana'
+      }
     })
+  
+    await request.post('/api/users', {
+      data: {
+        name: 'anotherUser',
+        username: 'another',
+        password: 'password'
+      }
+    })
+  
+    await page.goto('/')
+  })
     
     test('front page can be opened', async ({ page }) => {
       const locator = await page.getByText('Blogs')
@@ -97,6 +106,19 @@ describe('Blog app', () => {
         await page.getByRole('button', { name: 'remove' }).click()
         await expect(page.getByText('React test Author')).not.toBeVisible()
       })
-    })  
 
+      test('only the user who created the blog sees the delete button', async ({ page, request }) => {   
+        await createBlog(page, {
+          title: 'React test',
+          author: 'Author',
+          url: 'https://example.com'
+        })
+      
+        await page.getByRole('button', { name: 'logout' }).click()
+        await page.getByRole('button', { name: 'cancel' }).click()
+        await loginWith(page, 'another', 'password')
+        await page.getByRole('button', { name: 'view' }).click()
+        await expect(page.getByRole('button', { name: 'remove' })).not.toBeVisible()
+      })
+    })  
 })
